@@ -19,6 +19,14 @@ from sklearn.model_selection import GridSearchCV
 import pickle
 
 def load_data(database_filepath):
+    """ Clean and format data to prepare to be analysed
+    Input
+    - database_filepath: path to the database
+    Output
+    - X: feature columns to classify
+    - Y: class columns
+    - category_names: a list of column names
+    """
     engine = create_engine('sqlite:///{}'.format(database_filepath))
     df = pd.read_sql_table('MESSAGE_CATEGORIES', engine)
     X = df['message'].values
@@ -28,6 +36,12 @@ def load_data(database_filepath):
 
 
 def tokenize(text):
+    """ Prepare text input to be processed further in the feature engineering
+    Input
+    - text: text to be tokenized
+    Output
+    - clean_tokens: tokens of the text
+    """
     tokens = word_tokenize(text)
     lemmatizer = WordNetLemmatizer()
     
@@ -40,6 +54,12 @@ def tokenize(text):
 
 
 def build_model():
+    """ Prepare the model pipeling
+    Input
+    - None
+    Output
+    - cv: a grid search as an estimator/model to find best pipeline parameters
+    """
     pipeline = Pipeline([
         ('vect', CountVectorizer(tokenizer=tokenize)),
         ('tfidf', TfidfTransformer()),
@@ -55,6 +75,15 @@ def build_model():
     return cv
 
 def evaluate_model(model, X_test, Y_test, category_names):
+    """ Run the trained model on a test set and evaluate the result by looking at accuracy, recall, precision.
+    Input
+    - model: trained model
+    - X_test: features of test set
+    - Y_test: classes of test set
+    - category_names: list of the category names
+    Output
+    None - Console output of accuracy/recall/precision of each category
+    """
     y_pred  = model.predict(X_test)
     for i in range(len(y_pred[0])):
         print("Metrics for", category_names[i])
@@ -64,6 +93,13 @@ def evaluate_model(model, X_test, Y_test, category_names):
 
 
 def save_model(model, model_filepath):
+    """ Save the model in a file
+    Input
+    - model: trained model
+    - model_filepath: path to save
+    Output
+    None - a pickle file containing the model
+    """
     pickle.dump(model, open(model_filepath, 'wb'))
     pass
 

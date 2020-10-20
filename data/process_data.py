@@ -3,6 +3,13 @@ import pandas as pd
 from sqlalchemy import create_engine
 
 def load_data(messages_filepath, categories_filepath):
+    """ Function to load input data (in csv) to a pandas dataframe
+    Input
+    - messages_filepath: path to the message dataset
+    - categories_filepath: path to the categories dataset
+    Output
+    - df: a dataframe with message and categories datasets merged
+    """
     messages = pd.read_csv(messages_filepath)
     categories = pd.read_csv(categories_filepath)
     df = messages.merge(categories, on="id", how="inner")
@@ -10,13 +17,19 @@ def load_data(messages_filepath, categories_filepath):
 
 
 def clean_data(df):
+    """ Clean and format data to prepare to be analysed
+    Input
+    - df: dataframe to be cleaned
+    Output
+    - df: cleaned data frame
+    """
     # create a dataframe of the 36 individual category columns
     categories = df['categories'].str.split(";", expand=True)
     
     # select the first row of the categories dataframe
     row = categories.iloc[0]
 
-    # use this row to extract a list of new column names for categories.
+    # to extract a list of new column names for categories.
     # one way is to apply a lambda function that takes everything 
     # up to the second to last character of each string with slicing
     category_colnames = row.apply(lambda x: x[:-2])
@@ -35,14 +48,19 @@ def clean_data(df):
     df = pd.concat([df,categories], axis=1)
     df = df.drop_duplicates()
     
-    
-    
     # remove value 2
     df.loc[df.related == 2, 'related']=1
     return df
 
 
 def save_data(df, database_filename):
+    """ Save dataframe as a SQLite database
+    Input
+    - df: dataframe to save
+    - database_filename: name of the database
+    Output
+    None - a SQLite should be produced
+    """
     engine = create_engine('sqlite:///{}'.format(database_filename))
     df.to_sql("MESSAGE_CATEGORIES", engine, index=False)
     pass  
