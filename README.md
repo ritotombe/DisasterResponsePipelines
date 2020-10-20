@@ -1,4 +1,5 @@
 # Disaster Response Pipeline Project
+This project is a part of Udacity Data Scientist program. This project aims to create a platform that can predict a text's disaster related topics. 
 
 ### Instructions:
 1. Run the following commands in the project's root directory to set up your database and model.
@@ -12,3 +13,25 @@
     `python run.py`
 
 3. Go to http://0.0.0.0:3001/
+
+
+### Files:
+```
+- app
+| - template
+| |- master.html  # main page of web app
+| |- go.html  # classification result page of web app
+|- run.py  # Flask file that runs app
+
+- data
+|- disaster_categories.csv  # data to process 
+|- disaster_messages.csv  # data to process
+|- process_data.py # python script to clean data
+|- DisasterResponse.db   # database to save clean data to
+
+- models
+|- train_classifier.py # python script to build model
+|- classifier.pkl  # saved model 
+
+- README.md
+```
