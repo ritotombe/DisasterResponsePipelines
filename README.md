@@ -1,4 +1,8 @@
 # Disaster Response Pipeline Project
+Emergency situation needs highly efficient and quick information processing and transportation to ensure in-time intervention. However, sometimes emergency messages presented in a plain human language, although human can easily interpret a message quickly, we cannot keep up when we have tons of messages at the same time. This app will help emergency workers to get quick result of what a emergency message might need. 
+
+Further implementation can be to load a csv and then code each of the message to understand what will be needed the most to help prioritisation.
+
 This project is a part of Udacity Data Scientist program. This project aims to create a platform that can predict a text's disaster related topics. 
 
 ### Instructions:

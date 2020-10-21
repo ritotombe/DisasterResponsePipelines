@@ -22,7 +22,7 @@ def load_data(database_filepath):
     """ Clean and format data to prepare to be analysed
     Input
     - database_filepath: path to the database
-    Output
+    Return
     - X: feature columns to classify
     - Y: class columns
     - category_names: a list of column names
@@ -39,7 +39,7 @@ def tokenize(text):
     """ Prepare text input to be processed further in the feature engineering
     Input
     - text: text to be tokenized
-    Output
+    Return
     - clean_tokens: tokens of the text
     """
     tokens = word_tokenize(text)
@@ -57,7 +57,7 @@ def build_model():
     """ Prepare the model pipeling
     Input
     - None
-    Output
+    Return
     - cv: a grid search as an estimator/model to find best pipeline parameters
     """
     pipeline = Pipeline([
@@ -75,30 +75,31 @@ def build_model():
     return cv
 
 def evaluate_model(model, X_test, Y_test, category_names):
-    """ Run the trained model on a test set and evaluate the result by looking at accuracy, recall, precision.
+    """ Run the trained model on a test set and evaluate the result by looking at accuracy, recall, precision. 
+    Console shows accuracy/recall/precision of each category
     Input
     - model: trained model
     - X_test: features of test set
     - Y_test: classes of test set
     - category_names: list of the category names
-    Output
-    None - Console output of accuracy/recall/precision of each category
+    Return
+    None
     """
     y_pred  = model.predict(X_test)
     for i in range(len(y_pred[0])):
         print("Metrics for", category_names[i])
-        print("Accuracy:", (Y_test[:,i] == y_pred[:,i]).mean())
         print(classification_report(Y_test[:,i], y_pred[:,i]))
     pass
 
 
 def save_model(model, model_filepath):
-    """ Save the model in a file
+    """ Save the model in a file. 
+    Produces a pickle file containing the model
     Input
     - model: trained model
     - model_filepath: path to save
-    Output
-    None - a pickle file containing the model
+    Return
+    None
     """
     pickle.dump(model, open(model_filepath, 'wb'))
     pass
