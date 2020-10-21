@@ -11,7 +11,6 @@ from plotly.graph_objs import Bar
 from sklearn.externals import joblib
 from sqlalchemy import create_engine
 
-
 app = Flask(__name__)
 
 def tokenize(text):
@@ -42,6 +41,10 @@ def index():
     # TODO: Below is an example - modify to extract data for your own visuals
     genre_counts = df.groupby('genre').count()['message']
     genre_names = list(genre_counts.index)
+
+    category_names = df.drop(columns=['id', 'message', 'original', 'genre']).columns
+    category_counts = (df[category_names].sum()/df.shape[0]*100).sort_values(ascending=False)[:10]
+    
     
     # create visuals
     # TODO: Below is an example - modify to create your own visuals
@@ -62,6 +65,28 @@ def index():
                 'xaxis': {
                     'title': "Genre"
                 }
+            }
+        },
+        {
+            'data': [
+                Bar(
+                    y=category_counts.index,
+                    x=category_counts,
+                    orientation='h',
+                )
+            ],
+
+            'layout': {
+                'title': 'Top categories',
+                'yaxis': {
+                    'title': "Category",
+                    'categoryorder':"total ascending",
+                    'automargin':True
+                },
+                'xaxis': {
+                    'title': "Relative proportion (%)"
+                },
+
             }
         }
     ]
